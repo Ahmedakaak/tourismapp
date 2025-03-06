@@ -27,7 +27,7 @@ class MyHome extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("tourism app",style: TextStyle(color: const Color.fromARGB(255, 77, 53, 75)),),
+        title: Text("tourism p",style: TextStyle(color: const Color.fromARGB(255, 77, 53, 75)),),
         backgroundColor: const Color.fromARGB(255, 200, 228, 252),
         centerTitle: true,
       ),
