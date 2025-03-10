@@ -39,6 +39,10 @@ class MyHome extends StatelessWidget {
             color: const Color.fromARGB(255, 176, 255, 179),
             child: Image(image: AssetImage('images/Salalah1.jpg')),
           ),
+          Text(
+            'Popular Places',
+            style: TextStyle(fontSize: 20.0, fontWeight: FontWeight.bold),
+          ),
 
           Row(
             children: [
@@ -51,7 +55,33 @@ class MyHome extends StatelessWidget {
               Expanded(child: Image(image: AssetImage("images/Salalah3.jpg"))),
             ],
           ),
+          Container(
+            width: double.infinity,
+            color: const Color.fromARGB(255, 40, 121, 43),
+            child: Text(
+              textAlign: TextAlign.center,
+              'featerd place',
+              style: TextStyle(
+                fontSize: 20.0,
+                fontWeight: FontWeight.bold,
+                color: const Color.fromARGB(255, 255, 255, 255),
+              ),
+            ),
+          ),
+          Container(
+            color: const Color.fromARGB(255, 187, 187, 187),
+            child: Image(image: AssetImage("images/Salalah4.jpg")),
+          ),
         ],
+      ),
+      floatingActionButton: FloatingActionButton(
+        tooltip: 'Test',
+        backgroundColor: const Color.fromARGB(255, 114, 155, 115),
+        foregroundColor: Color.fromARGB(255, 248, 248, 248),
+        child: Icon(Icons.home),
+        onPressed: () {
+          print("welcome home");
+        },
       ),
     );
   }
