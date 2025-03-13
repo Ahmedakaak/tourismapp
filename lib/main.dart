@@ -43,17 +43,35 @@ class MyHome extends StatelessWidget {
             'Popular Places in Oman',
             style: TextStyle(fontSize: 20.0, fontWeight: FontWeight.bold),
           ),
-
           const Row(
             children: [
               Expanded(
-                child: SizedBox(
-                  width: 200,
-                  child: Image(image: AssetImage("images/Salalah2.jpg")),
+                child: Column(
+                  children: [
+                    SizedBox(
+                      width: 200,
+                      child: Image(image: AssetImage("images/Salalah2.jpg")),
+                    ),
+                    MyFav(),
+                  ],
                 ),
               ),
-              Expanded(child: Image(image: AssetImage("images/Salalah3.jpg"))),
+              Expanded(
+                child: Column(
+                  children: [
+                    Image(image: AssetImage("images/Salalah3.jpg")),
+                    MyFav(),
+                  ],
+                ),
+              ),
             ],
+          ),
+          Container(
+            color: const Color.fromARGB(255, 89, 117, 139),
+            padding: EdgeInsets.all(10),
+            child: TextFormField(
+              decoration: InputDecoration(labelText: ""),
+            ),
           ),
           Container(
             width: double.infinity,
@@ -83,6 +101,31 @@ class MyHome extends StatelessWidget {
           print("welcome home");
         },
       ),
+    );
+  }
+}
+
+class MyFav extends StatefulWidget {
+  const MyFav({super.key});
+
+  @override
+  State<MyFav> createState() => _MyFavState();
+}
+
+class _MyFavState extends State<MyFav> {
+  bool liked = false;
+  @override
+  Widget build(BuildContext context) {
+    return IconButton(
+      onPressed: () {
+        setState(() => liked = !liked);
+      },
+      icon: liked
+          ? (const Icon(
+              Icons.favorite,
+              color: Colors.red,
+            ))
+          : (const Icon(Icons.favorite)),
     );
   }
 }
