@@ -12,6 +12,7 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
+  TextEditingController r = TextEditingController();
   @override
   Widget build(BuildContext context) {
     return const MaterialApp(home: MyHome());
@@ -70,7 +71,7 @@ class MyHome extends StatelessWidget {
             color: const Color.fromARGB(255, 89, 117, 139),
             padding: EdgeInsets.all(10),
             child: TextFormField(
-              decoration: InputDecoration(labelText: ""),
+              decoration: InputDecoration(labelText: "write you name"),
             ),
           ),
           Container(
