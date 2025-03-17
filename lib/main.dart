@@ -15,7 +15,10 @@ class _MyAppState extends State<MyApp> {
   TextEditingController r = TextEditingController();
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(home: MyHome());
+    return const MaterialApp(
+      debugShowCheckedModeBanner: false,
+      home: MyHome()
+    );
   }
 }
 
