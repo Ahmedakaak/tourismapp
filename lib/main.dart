@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:table_calendar/table_calendar.dart';
+import 'package:tourism_app/login.dart';
 
 void main() {
   runApp(const MyApp());
@@ -12,204 +14,213 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  TextEditingController r = TextEditingController();
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(home: MyHome());
+    return MaterialApp(home: MyHome());
   }
 }
 
-class MyHome extends StatefulWidget {
+class MyHome extends StatelessWidget {
   const MyHome({super.key});
 
-  @override
-  State<MyHome> createState() => _MyHomeState();
-}
-
-class _MyHomeState extends State<MyHome> {
-  final TextEditingController currency = TextEditingController();
-  double currency_rate = 0;
-  String radioType = "mc";
-  double Discount = 0.0;
-  double netRate = 0.0;
-  bool ta = false;
-  bool tb = false;
-  double tourPrice = 0.0;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text(
-          "tourism app",
-          style: TextStyle(color: Color.fromARGB(255, 34, 44, 34)),
+        title: Text(
+          'Tourism App',
+          style: TextStyle(
+            color: Colors.white,
+            letterSpacing: 2.0,
+          ),
         ),
-        backgroundColor: const Color.fromARGB(255, 48, 119, 48),
         centerTitle: true,
+        backgroundColor: Colors.green[800],
       ),
+      drawer: MyDrawer(),
       body: SingleChildScrollView(
         child: Column(
           children: [
             Container(
-              padding: const EdgeInsets.all(20),
-              color: const Color.fromARGB(255, 176, 255, 179),
-              child: const Image(image: AssetImage('images/Salalah1.jpg')),
+              color: Colors.green[800],
+              margin: EdgeInsets.zero,
+              padding: EdgeInsets.all(20),
+              height: 300.0,
+              width: 500.0,
+              child: Image(
+                image: AssetImage('images/Salalah1.jpg'),
+              ),
             ),
-            const Text(
-              'Popular Places in Oman',
-              style: TextStyle(fontSize: 20.0, fontWeight: FontWeight.bold),
+            Container(
+              alignment: Alignment.center,
+              width: double.infinity,
+              color: Colors.amber,
+              child: Text(
+                'Popular Places',
+                style: TextStyle(
+                  fontSize: 18.0,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.white,
+                ),
+              ),
             ),
-            const Row(
+            Row(
               children: [
                 Expanded(
                   child: Column(
                     children: [
-                      SizedBox(
-                        width: 200,
-                        child: Image(image: AssetImage("images/Salalah2.jpg")),
+                      Card(
+                        elevation: 0.0,
+                        margin: EdgeInsets.all(10),
+                        child: SizedBox(
+                          width: 200,
+                          child:
+                              Image(image: AssetImage('images/Salalah2.jpg')),
+                        ),
                       ),
-                      MyFav(),
+                      Row(
+                        children: [
+                          Container(
+                              margin: EdgeInsets.only(left: 10),
+                              child: Text('Darbat Falls / OMR 25')),
+                          Spacer(),
+                          Align(alignment: Alignment.bottomRight, child: Fav()),
+                        ],
+                      )
                     ],
                   ),
                 ),
                 Expanded(
                   child: Column(
                     children: [
-                      Image(image: AssetImage("images/Salalah3.jpg")),
-                      MyFav(),
+                      Card(
+                        elevation: 0.0,
+                        margin: EdgeInsets.all(10),
+                        child: SizedBox(
+                          width: 200,
+                          child:
+                              Image(image: AssetImage('images/Salalah3.jpg')),
+                        ),
+                      ),
+                      Row(
+                        children: [
+                          Container(
+                              margin: EdgeInsets.only(left: 10),
+                              child: Text('Haffa Beach / OMR 20 ')),
+                          Spacer(),
+                          Align(alignment: Alignment.bottomRight, child: Fav()),
+                        ],
+                      )
                     ],
                   ),
                 ),
               ],
             ),
             Container(
-              color: const Color.fromARGB(255, 255, 255, 255),
-              padding: EdgeInsets.all(10),
-              child: TextFormField(
-                controller: currency,
-                decoration: InputDecoration(
-                    prefixIcon: Icon(Icons.money),
-                    border: OutlineInputBorder(),
-                    labelText: "write you name"),
-              ),
-            ),
-            OutlinedButton(
-                onPressed: () {
-                  setState(() {
-                    currency_rate = double.parse(currency.text) * 2.6;
-                  });
-                },
-                child: Text("convert")),
-            Text(
-              "OMR TO USD: " + currency_rate.toStringAsFixed(3),
-              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+              width: double.infinity,
+              color: Colors.amber[900],
+              height: 5,
             ),
             Container(
               width: double.infinity,
-              color: const Color.fromARGB(255, 40, 121, 43),
-              child: const Text(
+              color: Colors.grey,
+              child: Text(
+                'Currency Converter',
                 textAlign: TextAlign.center,
-                'featerd place',
                 style: TextStyle(
+                  color: Colors.white,
                   fontSize: 20.0,
                   fontWeight: FontWeight.bold,
-                  color: Color.fromARGB(255, 255, 255, 255),
                 ),
               ),
             ),
-            Container(
-              color: const Color.fromARGB(255, 187, 187, 187),
-              child: const Image(image: AssetImage("images/Salalah4.jpg")),
+            Currency(),
+            Discount(),
+            Tours(),
+            MyTableCalendar(),
+            SizedBox(
+              height: 100.0,
             ),
-            Container(
-              padding: EdgeInsets.all(10),
-              child: Text("Tour Discount" + netRate.toStringAsFixed(3)),
-            ),
-            RadioListTile(
-                title: Text("Member Customer"),
-                value: "mc",
-                groupValue: radioType,
-                onChanged: (value) {
-                  setState(() {
-                    radioType = value.toString();
-                    if (currency.text.isNotEmpty &&
-                        double.parse(currency.text) != 0) {
-                      Discount = double.parse(currency.text) * 0.5;
-                      netRate = double.parse(currency.text) - Discount;
-                    }
-                  });
-                }),
-            RadioListTile(
-                title: Text("Guset Customer"),
-                value: "gc",
-                groupValue: radioType,
-                onChanged: (value) {
-                  setState(() {
-                    radioType = "gc";
-                    if (currency.text.isNotEmpty &&
-                        double.parse(currency.text) != 0) {
-                      Discount = double.parse(currency.text) * 0.1;
-                      netRate = double.parse(currency.text) - Discount;
-                    }
-                  });
-                }),
-            Container(
-              width: double.infinity,
-              alignment: Alignment.center,
-              child: Text(
-                "Tour : " + tourPrice.toStringAsFixed(3),
-                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-              ),
-            ),
-            CheckboxListTile(
-                title: Image(image: AssetImage("images/Salalah1.jpg")),
-                value: tb,
-                onChanged: (value) {
-                  setState(() {
-                    tb = value!;
-                    if (tb) {
-                      tourPrice += 50;
-                    } else {
-                      tourPrice -= 50;
-                    }
-                  });
-                }),
-            CheckboxListTile(
-                title: Image(image: AssetImage("images/Salalah2.jpg")),
-                value: ta,
-                onChanged: (value) {
-                  setState(() {
-                    ta = value!;
-                    if (ta) {
-                      tourPrice += 50;
-                    } else {
-                      tourPrice -= 50;
-                    }
-                  });
-                })
+            DropButton()
           ],
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        tooltip: 'Test',
-        backgroundColor: const Color.fromARGB(255, 114, 155, 115),
-        foregroundColor: const Color.fromARGB(255, 248, 248, 248),
-        child: const Icon(Icons.home),
-        onPressed: () {
-          print("welcome home");
-        },
+        onPressed: () {},
+        backgroundColor: Colors.green[400],
+        foregroundColor: Colors.white,
+        child: Icon(Icons.add_circle_sharp),
       ),
     );
   }
 }
 
-class MyFav extends StatefulWidget {
-  const MyFav({super.key});
+class DropButton extends StatefulWidget {
+  const DropButton({super.key});
 
   @override
-  State<MyFav> createState() => _MyFavState();
+  State<DropButton> createState() => _DropButtonState();
 }
 
-class _MyFavState extends State<MyFav> {
+class _DropButtonState extends State<DropButton> {
+  String selectedval = 'Sightseeing';
+  List tours = ['Sightseeing', 'Adventure', 'Relaxation'];
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: double.infinity,
+      height: 200.0,
+      child: ListView(
+        children: [
+          Container(
+            width: double.infinity,
+            color: Colors.grey,
+            child: Text('Tour Type',
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                    fontSize: 20.0,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.amber)),
+          ),
+          Text(
+            'Select Tour Type',
+            style: TextStyle(
+              fontSize: 20.0,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+          DropdownButton(
+            icon: Icon(Icons.arrow_drop_down),
+            items: tours.map((e) {
+              return DropdownMenuItem(
+                value: e,
+                child: Text(e),
+              );
+            }).toList(),
+            value: selectedval,
+            onChanged: (value) {
+              setState(() {
+                selectedval = value.toString();
+              });
+            },
+          ),
+          SizedBox(
+            height: 20,
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class Fav extends StatefulWidget {
+  const Fav({super.key});
+
+  @override
+  State<Fav> createState() => _FavState();
+}
+
+class _FavState extends State<Fav> {
   bool liked = false;
   @override
   Widget build(BuildContext context) {
@@ -218,11 +229,391 @@ class _MyFavState extends State<MyFav> {
         setState(() => liked = !liked);
       },
       icon: liked
-          ? (const Icon(
+          ? (Icon(
               Icons.favorite,
               color: Colors.red,
             ))
-          : (const Icon(Icons.favorite)),
+          : (Icon(Icons.favorite)),
+    );
+  }
+}
+
+class Currency extends StatefulWidget {
+  const Currency({super.key});
+
+  @override
+  State<Currency> createState() => _CurrencyState();
+}
+
+class _CurrencyState extends State<Currency> {
+  final TextEditingController _curr = TextEditingController();
+  double currRate = 0;
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: EdgeInsets.all(20),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          TextFormField(
+            controller: _curr,
+            decoration: InputDecoration(
+              labelText: 'Currency in OMR',
+              prefixIcon: Icon(Icons.money),
+              border: OutlineInputBorder(),
+            ),
+          ),
+          SizedBox(
+            height: 20,
+          ),
+          OutlinedButton(
+            onPressed: () {
+              setState(() {
+                currRate = (double.parse(_curr.text)) * 2.60;
+              });
+            },
+            style: OutlinedButton.styleFrom(maximumSize: Size(100, 50)),
+            child: Text(
+              'Convert',
+              style: TextStyle(fontWeight: FontWeight.bold),
+            ),
+          ),
+          SizedBox(
+            height: 20,
+          ),
+          Text(
+            'OMR TO USD : $currRate',
+            style: TextStyle(
+                fontSize: 20,
+                color: Colors.blueGrey,
+                fontWeight: FontWeight.bold),
+            textAlign: TextAlign.center,
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class Discount extends StatefulWidget {
+  const Discount({super.key});
+
+  @override
+  State<Discount> createState() => _DiscountState();
+}
+
+class _DiscountState extends State<Discount> {
+  String mtype = "mc";
+  final TextEditingController _tourRate = TextEditingController();
+  double discount = 0.0;
+  double netRate = 0.0;
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        Container(
+          width: double.infinity,
+          color: Colors.amber[900],
+          height: 5,
+        ),
+        Container(
+          width: double.infinity,
+          color: Colors.grey,
+          child: Text('Tour Discount',
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 20.0,
+                  color: Colors.white)),
+        ),
+        Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Column(
+            children: [
+              TextFormField(
+                controller: _tourRate,
+                onChanged: (value) {
+                  setState(() {
+                    if (_tourRate.text.isNotEmpty &&
+                        double.parse(_tourRate.text) != 0) {
+                      discount = double.parse(_tourRate.text) * 0.8;
+                      netRate = double.parse(_tourRate.text) - discount;
+                    } else {
+                      discount = 0.0;
+                      netRate = 0.0;
+                    }
+                  });
+                },
+                decoration: InputDecoration(
+                  labelText: 'Tour Rate',
+                  prefixIcon: Icon(Icons.money),
+                  border: OutlineInputBorder(),
+                ),
+              ),
+              RadioListTile(
+                title: Text("Member Customer"),
+                value: "mc",
+                groupValue: mtype,
+                onChanged: (value) {
+                  setState(() {
+                    mtype = value.toString();
+                    if (_tourRate.text.isNotEmpty &&
+                        double.parse(_tourRate.text) != 0) {
+                      discount = double.parse(_tourRate.text) * 0.8;
+                      netRate = double.parse(_tourRate.text) - discount;
+                    }
+                  });
+                },
+              ),
+              RadioListTile(
+                  title: Text("Guest Customer"),
+                  value: "gc",
+                  groupValue: mtype,
+                  onChanged: (value) {
+                    setState(() {
+                      mtype = value.toString();
+
+                      if (_tourRate.text.isNotEmpty &&
+                          double.parse(_tourRate.text) != 0) {
+                        discount = double.parse(_tourRate.text) * 0.5;
+                        netRate = double.parse(_tourRate.text) - discount;
+                      }
+                    });
+                  }),
+              Text('Tour Estimated Rate'),
+              Text('Discount: $discount'),
+              Text('Net Rate: $netRate'),
+              SizedBox(
+                height: 50.0,
+              )
+            ],
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+class Tours extends StatefulWidget {
+  const Tours({super.key});
+
+  @override
+  State<Tours> createState() => _ToursState();
+}
+
+class _ToursState extends State<Tours> {
+  bool ta = false;
+  bool tb = false;
+  bool tc = false;
+  bool td = false;
+  double tourPrice = 0;
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        Container(
+          width: double.infinity,
+          color: Colors.grey,
+          alignment: Alignment.center,
+          child: Text(
+            'Tours',
+            style: TextStyle(
+              color: Colors.white,
+              fontSize: 20.0,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+        ),
+        CheckboxListTile(
+          title: Image(image: AssetImage('images/Salalah1.jpg')),
+          value: ta,
+          onChanged: (value) {
+            setState(() {
+              ta = value!;
+              if (ta) {
+                tourPrice += 150;
+              } else {
+                tourPrice -= 150;
+              }
+            });
+          },
+        ),
+        CheckboxListTile(
+          title: Image(image: AssetImage('images/Salalah2.jpg')),
+          value: tb,
+          onChanged: (value) {
+            setState(() {
+              tb = value!;
+              if (tb) {
+                tourPrice += 50;
+              } else {
+                tourPrice -= 50;
+              }
+            });
+          },
+        ),
+        CheckboxListTile(
+          title: Image(image: AssetImage('images/Salalah3.jpg')),
+          value: tc,
+          onChanged: (value) {
+            setState(() {
+              tc = value!;
+              if (tc) {
+                tourPrice += 70;
+              } else {
+                tourPrice -= 70;
+              }
+            });
+          },
+        ),
+        CheckboxListTile(
+          title: Image(image: AssetImage('images/Salalah4.jpg')),
+          value: td,
+          onChanged: (value) {
+            setState(() {
+              td = value!;
+              if (td) {
+                tourPrice += 70;
+              } else {
+                tourPrice -= 70;
+              }
+            });
+          },
+        ),
+        Container(
+          width: double.infinity,
+          alignment: Alignment.center,
+          color: Colors.grey,
+          child: Text(
+            'Total Tour Price: $tourPrice',
+            style: TextStyle(
+                fontSize: 20, fontWeight: FontWeight.bold, color: Colors.white),
+          ),
+        ),
+        SizedBox(
+          height: 100.0,
+        ),
+      ],
+    );
+  }
+}
+
+class MyTableCalendar extends StatefulWidget {
+  const MyTableCalendar({super.key});
+
+  @override
+  State<MyTableCalendar> createState() => _MyTableCalendarState();
+}
+
+class _MyTableCalendarState extends State<MyTableCalendar> {
+  DateTime selectedDay = DateTime.now();
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        Container(
+          color: Colors.grey,
+          width: double.infinity,
+          alignment: Alignment.center,
+          child: Text(
+            'Select Tour Date',
+            style: TextStyle(
+                color: Colors.white,
+                fontSize: 20.0,
+                fontWeight: FontWeight.bold),
+          ),
+        ),
+        TableCalendar(
+          rowHeight: 40,
+          headerStyle: HeaderStyle(
+            formatButtonVisible: false,
+            titleCentered: true,
+          ),
+          firstDay: DateTime.utc(2020, 1, 1),
+          lastDay: DateTime.utc(2030, 12, 31),
+          focusedDay: selectedDay,
+          calendarFormat: CalendarFormat.month,
+          startingDayOfWeek: StartingDayOfWeek.sunday,
+          daysOfWeekVisible: true,
+          onDaySelected: (selectedDay, focusedDay) {
+            setState(() {
+              this.selectedDay = selectedDay;
+            });
+          },
+          selectedDayPredicate: (day) => isSameDay(selectedDay, day),
+        ),
+      ],
+    );
+  }
+}
+
+class MyDrawer extends StatefulWidget {
+  const MyDrawer({super.key});
+
+  @override
+  State<MyDrawer> createState() => _MyDrawerState();
+}
+
+class _MyDrawerState extends State<MyDrawer> {
+  @override
+  Widget build(BuildContext context) {
+    return Drawer(
+      backgroundColor: const Color.fromARGB(255, 18, 117, 51),
+      child: ListView(
+        // ignore: prefer_const_literals_to_create_immutables
+        children: [
+          UserAccountsDrawerHeader(
+            accountName: Text("Ahmed"),
+            accountEmail: Text("Ahmed@gmail.com"),
+            currentAccountPicture: CircleAvatar(
+              child: ClipOval(
+                child: Image(image: AssetImage("images/Mypicture2.jpg")),
+              ),
+            ),
+          ),
+          ListTile(
+              leading: Icon(
+                Icons.home,
+                color: Colors.white,
+              ),
+              title: Text(
+                "Home",
+                style: TextStyle(
+                  color: Colors.white,
+                  fontWeight: FontWeight.bold,
+                ),
+              )),
+          ListTile(
+            leading: Icon(
+              Icons.login,
+              color: Colors.white,
+            ),
+            title: Text(
+              "Login",
+              style: TextStyle(
+                color: Colors.white,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            onTap: () {
+              Navigator.push(
+                  context, MaterialPageRoute(builder: (context) => MyLogin()));
+            },
+          ),
+          ListTile(
+              leading: Icon(
+                Icons.phone,
+                color: Colors.white,
+              ),
+              title: Text(
+                "contact us",
+                style: TextStyle(
+                  color: Colors.white,
+                  fontWeight: FontWeight.bold,
+                ),
+              )),
+        ],
+      ),
     );
   }
 }
