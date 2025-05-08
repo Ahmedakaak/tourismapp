@@ -1,8 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:table_calendar/table_calendar.dart';
 import 'package:tourism_app/login.dart';
+import 'package:tourism_app/register.dart';
+import 'package:firebase_core/firebase_core.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(
+      options: const FirebaseOptions(
+          apiKey: "AIzaSyDvfaPien-u1Gm7_IqV21qtFouZrO3qCjw",
+          appId: "1:133599849776:android:8328467dd631ca003facf5",
+          messagingSenderId: "133599849776",
+          projectId: "tourismapp-73933"));
+
   runApp(const MyApp());
 }
 
@@ -598,6 +608,23 @@ class _MyDrawerState extends State<MyDrawer> {
             onTap: () {
               Navigator.push(
                   context, MaterialPageRoute(builder: (context) => MyLogin()));
+            },
+          ),
+          ListTile(
+            leading: Icon(
+              Icons.login,
+              color: Colors.white,
+            ),
+            title: Text(
+              "Regsiter",
+              style: TextStyle(
+                color: Colors.white,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            onTap: () {
+              Navigator.push(context,
+                  MaterialPageRoute(builder: (context) => MyRegister()));
             },
           ),
           ListTile(
