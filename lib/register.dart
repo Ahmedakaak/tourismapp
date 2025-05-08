@@ -35,6 +35,8 @@ class _MyLoginState extends State<MyRegister> {
                 content: Text("Fauld to Registration!!"),
                 duration: Duration(seconds: 2),
               )));
+
+      addUserDetails();
     }
   }
 
