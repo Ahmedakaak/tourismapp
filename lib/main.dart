@@ -1,8 +1,11 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:table_calendar/table_calendar.dart';
+import 'package:tourism_app/add_popular.dart';
 import 'package:tourism_app/login.dart';
 import 'package:tourism_app/register.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:tourism_app/show_popular.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -26,7 +29,7 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(debugShowCheckedModeBanner: false, home: MyHome());
+    return MaterialApp(debugShowCheckedModeBanner: false, home: MyLogin());
   }
 }
 
@@ -83,7 +86,7 @@ class MyHome extends StatelessWidget {
                         elevation: 0.0,
                         margin: EdgeInsets.all(10),
                         child: SizedBox(
-                          width: 200,
+                          width: 150,
                           child:
                               Image(image: AssetImage('images/Salalah2.jpg')),
                         ),
@@ -107,7 +110,7 @@ class MyHome extends StatelessWidget {
                         elevation: 0.0,
                         margin: EdgeInsets.all(10),
                         child: SizedBox(
-                          width: 200,
+                          width: 150,
                           child:
                               Image(image: AssetImage('images/Salalah3.jpg')),
                         ),
@@ -565,6 +568,11 @@ class MyDrawer extends StatefulWidget {
 }
 
 class _MyDrawerState extends State<MyDrawer> {
+  Future SignOut() async {
+    await FirebaseAuth.instance.signOut();
+    Navigator.popUntil(context, ModalRoute.withName("/"));
+  }
+
   @override
   Widget build(BuildContext context) {
     return Drawer(
@@ -628,17 +636,55 @@ class _MyDrawerState extends State<MyDrawer> {
             },
           ),
           ListTile(
-              leading: Icon(
-                Icons.phone,
+            leading: Icon(
+              Icons.add_box_rounded,
+              color: Colors.white,
+            ),
+            title: Text(
+              "Popular places",
+              style: TextStyle(
                 color: Colors.white,
+                fontWeight: FontWeight.bold,
               ),
-              title: Text(
-                "contact us",
-                style: TextStyle(
-                  color: Colors.white,
-                  fontWeight: FontWeight.bold,
-                ),
-              )),
+            ),
+            onTap: () {
+              Navigator.push(context,
+                  MaterialPageRoute(builder: (context) => AddPopular()));
+            },
+          ),
+          ListTile(
+            leading: Icon(
+              Icons.add_box_rounded,
+              color: Colors.white,
+            ),
+            title: Text(
+              "Display Popular places",
+              style: TextStyle(
+                color: Colors.white,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            onTap: () {
+              Navigator.push(context,
+                  MaterialPageRoute(builder: (context) => ShowPopular()));
+            },
+          ),
+          ListTile(
+            leading: Icon(
+              Icons.logout,
+              color: Colors.white,
+            ),
+            title: Text(
+              "Sign out",
+              style: TextStyle(
+                color: Colors.white,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            onTap: () {
+              SignOut();
+            },
+          ),
         ],
       ),
     );

@@ -19,7 +19,7 @@ class _MyLoginState extends State<MyLogin> {
       await FirebaseAuth.instance.signInWithEmailAndPassword(
           email: _email.text.trim(), password: _password.text.trim());
       Navigator.of(context)
-          .push(MaterialPageRoute(builder: (context) => MyApp()));
+          .push(MaterialPageRoute(builder: (context) => MyHome()));
     } on FirebaseAuthException catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
         content: Text(e.code),
@@ -69,7 +69,9 @@ class _MyLoginState extends State<MyLogin> {
               padding: const EdgeInsets.only(left: 150, right: 150),
               child: OutlinedButton(
                 style: ButtonStyle(),
-                onPressed: () {},
+                onPressed: () {
+                  signin();
+                },
                 child: Text("login"),
               ),
             ),
